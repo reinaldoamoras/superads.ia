@@ -20,7 +20,8 @@ import { SalesFlowManager } from './components/SalesFlowManager';
 import { BrainCenter } from './components/BrainCenter';
 import { LaunchCenter } from './components/LaunchCenter';
 import { AppView, GeneratedCampaign, Platform, CampaignObjective, PlatformWallet } from './types';
-import { CheckCircle2, AlertCircle, X, Info } from 'lucide-react';
+import { CheckCircle2, AlertCircle, X, Info, ShieldAlert, Rocket, RefreshCw } from 'lucide-react';
+import { isApiKeyMissing } from './services/geminiService';
 
 interface ToastProps {
   message: string;
@@ -115,6 +116,41 @@ function App() {
 
   const renderView = () => {
     const commonProps = { showNotification, onNavigate: setCurrentView };
+
+    // Verificação dinâmica da API KEY
+    const keyIsMissing = isApiKeyMissing();
+
+    if (currentView !== AppView.LOGIN && keyIsMissing) {
+      return (
+        <div className="min-h-[70vh] flex items-center justify-center p-6 text-center">
+            <div className="bg-slate-900 border-2 border-indigo-500/30 rounded-[2.5rem] p-12 max-w-xl shadow-2xl animate-scale-in">
+                <div className="w-24 h-24 bg-indigo-600/20 rounded-full flex items-center justify-center mx-auto mb-8">
+                    <ShieldAlert size={48} className="text-indigo-400" />
+                </div>
+                <h2 className="text-3xl font-bold text-white mb-4">Aguardando Conexão IA</h2>
+                <p className="text-slate-400 mb-8 leading-relaxed text-lg">
+                    O SuperAds está pronto para rodar, mas precisa do combustível: a sua <code className="bg-slate-800 px-2 py-0.5 rounded text-indigo-400 font-bold">API_KEY</code>.
+                </p>
+                <div className="space-y-4 text-left bg-slate-800/40 p-8 rounded-3xl border border-slate-700/50 mb-10">
+                    <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Próximos Passos:</p>
+                    <ol className="text-sm text-slate-300 space-y-3 list-decimal ml-5">
+                        <li>Acesse o <span className="text-white font-bold">Dashboard da Vercel</span>.</li>
+                        <li>Vá em <span className="text-white font-bold">Settings -> Environment Variables</span>.</li>
+                        <li>Adicione <span className="text-indigo-400 font-bold">API_KEY</span> e cole sua chave do Gemini.</li>
+                        <li>Clique em <span className="text-indigo-400 font-bold">Redeploy</span> no painel da Vercel.</li>
+                    </ol>
+                </div>
+                <button 
+                    onClick={() => window.location.reload()}
+                    className="w-full bg-indigo-600 text-white font-bold py-5 rounded-2xl hover:bg-indigo-500 transition-all flex items-center justify-center gap-3 shadow-xl shadow-indigo-900/40"
+                >
+                    <RefreshCw size={20} /> Já configurei, atualizar sistema
+                </button>
+                <p className="text-[10px] text-slate-600 mt-6 uppercase font-bold tracking-widest">SuperAds IA v2.1.2 Build Final</p>
+            </div>
+        </div>
+      );
+    }
 
     switch (currentView) {
       case AppView.LOGIN:
