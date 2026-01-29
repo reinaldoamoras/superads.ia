@@ -122,7 +122,7 @@ function App() {
       case AppView.DASHBOARD:
         return <Dashboard campaigns={campaigns} wallets={wallets} onViewCampaigns={() => {}} onToggleStatus={handleToggleCampaignStatus} onTopUp={handleTopUp} {...commonProps} />;
       case AppView.BRAIN_CENTER:
-        return <BrainCenter />;
+        return <BrainCenter {...commonProps} />;
       case AppView.LAUNCH_CENTER:
         return <LaunchCenter {...commonProps} />;
       case AppView.SALES_ACCELERATOR:
@@ -146,9 +146,9 @@ function App() {
       case AppView.LANDING_PAGE:
         return <LandingPageBuilder {...commonProps} />;
       case AppView.ACADEMY:
-        return <Academy />;
+        return <Academy {...commonProps} />;
       case AppView.BLOG:
-        return <Blog />;
+        return <Blog {...commonProps} />;
       case AppView.AFFILIATES:
         return <Affiliates {...commonProps} />;
       case AppView.TERMS:
