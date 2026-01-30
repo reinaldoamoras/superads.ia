@@ -20,7 +20,7 @@ import { SalesFlowManager } from './components/SalesFlowManager';
 import { BrainCenter } from './components/BrainCenter';
 import { LaunchCenter } from './components/LaunchCenter';
 import { AppView, GeneratedCampaign, Platform, CampaignObjective, PlatformWallet } from './types';
-import { CheckCircle2, AlertCircle, X, Info, ShieldAlert, Key } from 'lucide-react';
+import { CheckCircle2, AlertCircle, X, Info, ShieldAlert, Key, RefreshCcw } from 'lucide-react';
 import { isApiKeyMissing } from './services/geminiService';
 
 interface ToastProps {
@@ -148,22 +148,24 @@ function App() {
     return (
       <div className="flex flex-col h-full w-full">
         {keyIsMissing && (
-          <div className="sticky top-0 z-[100] bg-amber-600 text-white px-4 py-2 flex items-center justify-between shadow-xl animate-fade-in">
-            <div className="flex items-center gap-3">
-              <ShieldAlert size={18} />
+          <div className="sticky top-0 z-[100] bg-red-600 text-white px-4 py-3 flex items-center justify-between shadow-2xl border-b border-red-500 animate-fade-in">
+            <div className="flex items-center gap-4">
+              <ShieldAlert size={24} className="animate-pulse" />
               <div className="flex flex-col">
-                <span className="text-[11px] font-black uppercase tracking-tighter">Modo Demonstração Ativo</span>
-                <span className="text-[10px] font-medium opacity-90">A API Key não foi detectada. Adicione "API_KEY" na Vercel para habilitar a IA.</span>
+                <span className="text-sm font-black uppercase tracking-tighter">API KEY NÃO DETECTADA NO BUILD</span>
+                <span className="text-xs font-medium opacity-90">Você adicionou na Vercel? Se sim, clique em <b>Redeploy</b> para injetar a chave no código.</span>
               </div>
             </div>
-            <a 
-              href="https://vercel.com/dashboard" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="bg-white/20 hover:bg-white/30 px-3 py-1 rounded text-[10px] font-bold transition-colors flex items-center gap-1.5"
-            >
-              <Key size={12} /> Configurar
-            </a>
+            <div className="flex gap-2">
+              <a 
+                href="https://vercel.com/dashboard" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="bg-white text-red-600 px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 shadow-md hover:bg-slate-100"
+              >
+                <RefreshCcw size={14} /> Fazer Redeploy na Vercel
+              </a>
+            </div>
           </div>
         )}
         <div className="flex-1">
