@@ -126,20 +126,20 @@ function App() {
                 <div className="w-24 h-24 bg-indigo-600/10 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner border border-indigo-500/20">
                     <Server size={44} className="text-indigo-400" />
                 </div>
-                <h2 className="text-4xl font-black text-white mb-4 tracking-tighter italic uppercase">SISTEMA <span className="text-indigo-500">2.8.0</span></h2>
+                <h2 className="text-4xl font-black text-white mb-4 tracking-tighter italic uppercase">SISTEMA <span className="text-indigo-500">3.4.0</span></h2>
                 <p className="text-slate-400 mb-10 leading-relaxed text-lg max-w-lg mx-auto">
-                    Se você vê o número <b>2.8.0</b> acima, o erro de build foi corrigido. Falta apenas configurar sua chave de IA na Vercel.
+                    Se você vê <b>3.4.0</b> acima, o build foi bem sucedido. O arquivo <b>index.html</b> foi completamente limpo e o conflito de versões foi removido.
                 </p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
                     <div className="bg-slate-800/40 p-6 rounded-3xl border border-slate-700/50 text-left">
                         <p className="text-[11px] font-black text-indigo-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                           <Activity size={14}/> Sincronização
+                           <Activity size={14}/> Integridade
                         </p>
                         <div className="space-y-3 text-xs text-slate-400 font-medium">
-                           <div className="flex justify-between border-b border-slate-700/30 pb-2"><span>Build</span> <span className="text-white font-bold">v2.8.0 (STABLE)</span></div>
-                           <div className="flex justify-between border-b border-slate-700/30 pb-2"><span>Status</span> <span className="text-green-400 font-bold">PRONTO PARA USO</span></div>
-                           <div className="flex justify-between border-b border-slate-700/30 pb-2"><span>React</span> <span className="text-white">v18.3.1</span></div>
+                           <div className="flex justify-between border-b border-slate-700/30 pb-2"><span>Versão</span> <span className="text-white font-bold">v3.4.0 (FINAL)</span></div>
+                           <div className="flex justify-between border-b border-slate-700/30 pb-2"><span>Status</span> <span className="text-green-400 font-bold">BUILD LIMPO</span></div>
+                           <div className="flex justify-between border-b border-slate-700/30 pb-2"><span>Core</span> <span className="text-white">Vite Optimized</span></div>
                         </div>
                     </div>
                     <div className="bg-slate-800/40 p-6 rounded-3xl border border-slate-700/50 text-left">
@@ -147,7 +147,7 @@ function App() {
                            <Link2 size={14}/> Próximo Passo
                         </p>
                         <p className="text-[11px] text-slate-300 leading-relaxed">
-                            Vá ao painel da Vercel &rarr; Settings &rarr; Environment Variables e adicione <code className="text-white">API_KEY</code> com sua chave do Gemini.
+                            Vá ao painel da Vercel &rarr; Settings &rarr; Environment Variables e configure sua <code className="text-white">API_KEY</code> para ativar a IA Sniper.
                         </p>
                     </div>
                 </div>
