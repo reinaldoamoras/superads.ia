@@ -20,12 +20,8 @@ import { SalesFlowManager } from './components/SalesFlowManager';
 import { BrainCenter } from './components/BrainCenter';
 import { LaunchCenter } from './components/LaunchCenter';
 import { AppView, GeneratedCampaign, Platform, CampaignObjective, PlatformWallet } from './types';
-import { CheckCircle2, AlertCircle, X, Info, ShieldAlert, Rocket, RefreshCw } from 'lucide-react';
+import { CheckCircle2, AlertCircle, X, Info, RefreshCw, Activity, Link2, Server } from 'lucide-react';
 import { isApiKeyMissing } from './services/geminiService';
-
-/**
- * SuperAds IA - Versão 2.1.8 (Stable Production)
- */
 
 interface ToastProps {
   message: string;
@@ -124,33 +120,53 @@ function App() {
 
     if (currentView !== AppView.LOGIN && keyIsMissing) {
       return (
-        <div className="min-h-[70vh] flex items-center justify-center p-6 text-center">
-            <div className="bg-slate-900 border-2 border-indigo-500/40 rounded-[2.5rem] p-12 max-w-xl shadow-2xl animate-scale-in relative overflow-hidden">
-                <div className="absolute -top-24 -right-24 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl"></div>
-                <div className="w-24 h-24 bg-indigo-600/20 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner">
-                    <ShieldAlert size={48} className="text-indigo-400" />
+        <div className="min-h-[85vh] flex items-center justify-center p-6 text-center bg-slate-950">
+            <div className="bg-slate-900 border border-slate-800 rounded-[3rem] p-10 md:p-14 max-w-3xl shadow-[0_0_50px_rgba(79,70,229,0.15)] animate-scale-in relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600"></div>
+                <div className="w-24 h-24 bg-indigo-600/10 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner border border-indigo-500/20">
+                    <Server size={44} className="text-indigo-400" />
                 </div>
-                <h2 className="text-3xl font-bold text-white mb-4">Ação Necessária</h2>
-                <p className="text-slate-400 mb-8 leading-relaxed text-lg">
-                    Sua plataforma SuperAds está offline porque não encontrou a chave da inteligência artificial.
+                <h2 className="text-4xl font-black text-white mb-4 tracking-tighter italic uppercase">SISTEMA <span className="text-indigo-500">2.8.0</span></h2>
+                <p className="text-slate-400 mb-10 leading-relaxed text-lg max-w-lg mx-auto">
+                    Se você vê o número <b>2.8.0</b> acima, o erro de build foi corrigido. Falta apenas configurar sua chave de IA na Vercel.
                 </p>
-                <div className="space-y-4 text-left bg-slate-800/40 p-8 rounded-3xl border border-slate-700/50 mb-10">
-                    <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Como Ativar:</p>
-                    <ol className="text-sm text-slate-300 space-y-3 list-decimal ml-5">
-                        <li>Vá no seu painel da <span className="text-white font-bold">Vercel</span>.</li>
-                        <li>Clique em <span className="text-white font-bold">Settings</span> e depois em <span className="text-white font-bold">Environment Variables</span>.</li>
-                        <li>Adicione uma variável com o nome <span className="text-indigo-400 font-bold">API_KEY</span>.</li>
-                        <li>Cole sua chave do Gemini e clique em <span className="text-indigo-400 font-bold">Save</span>.</li>
-                        <li>Faça um <span className="text-indigo-400 font-bold">Redeploy</span>.</li>
-                    </ol>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                    <div className="bg-slate-800/40 p-6 rounded-3xl border border-slate-700/50 text-left">
+                        <p className="text-[11px] font-black text-indigo-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                           <Activity size={14}/> Sincronização
+                        </p>
+                        <div className="space-y-3 text-xs text-slate-400 font-medium">
+                           <div className="flex justify-between border-b border-slate-700/30 pb-2"><span>Build</span> <span className="text-white font-bold">v2.8.0 (STABLE)</span></div>
+                           <div className="flex justify-between border-b border-slate-700/30 pb-2"><span>Status</span> <span className="text-green-400 font-bold">PRONTO PARA USO</span></div>
+                           <div className="flex justify-between border-b border-slate-700/30 pb-2"><span>React</span> <span className="text-white">v18.3.1</span></div>
+                        </div>
+                    </div>
+                    <div className="bg-slate-800/40 p-6 rounded-3xl border border-slate-700/50 text-left">
+                         <p className="text-[11px] font-black text-indigo-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                           <Link2 size={14}/> Próximo Passo
+                        </p>
+                        <p className="text-[11px] text-slate-300 leading-relaxed">
+                            Vá ao painel da Vercel &rarr; Settings &rarr; Environment Variables e adicione <code className="text-white">API_KEY</code> com sua chave do Gemini.
+                        </p>
+                    </div>
                 </div>
-                <button 
-                    onClick={() => window.location.reload()}
-                    className="w-full bg-indigo-600 text-white font-bold py-5 rounded-2xl hover:bg-indigo-500 transition-all flex items-center justify-center gap-3 shadow-xl hover:shadow-indigo-500/20 group"
-                >
-                    <RefreshCw size={20} className="group-hover:rotate-180 transition-transform duration-500" /> Já configurei, atualizar sistema
-                </button>
-                <p className="text-[10px] text-slate-600 mt-6 uppercase font-bold tracking-widest">SuperAds Build 2.1.8 Stable</p>
+
+                <div className="flex flex-col md:flex-row gap-4">
+                    <button 
+                        onClick={() => window.location.reload()}
+                        className="flex-[2] bg-indigo-600 text-white font-black py-5 rounded-2xl hover:bg-indigo-500 transition-all flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(79,70,229,0.3)] group text-sm uppercase tracking-widest"
+                    >
+                        <RefreshCw size={20} className="group-hover:rotate-180 transition-transform duration-700" /> Reiniciar Motor
+                    </button>
+                    <a 
+                        href="https://vercel.com/dashboard" 
+                        target="_blank"
+                        className="flex-1 bg-slate-800 text-slate-300 font-bold py-5 rounded-2xl hover:bg-slate-700 transition-all border border-slate-700 flex items-center justify-center gap-2 text-sm uppercase tracking-widest"
+                    >
+                        Abrir Vercel
+                    </a>
+                </div>
             </div>
         </div>
       );
