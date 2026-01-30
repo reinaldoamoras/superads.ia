@@ -20,7 +20,7 @@ import { SalesFlowManager } from './components/SalesFlowManager';
 import { BrainCenter } from './components/BrainCenter';
 import { LaunchCenter } from './components/LaunchCenter';
 import { AppView, GeneratedCampaign, Platform, CampaignObjective, PlatformWallet } from './types';
-import { CheckCircle2, AlertCircle, X, Info, RefreshCw, Activity, Link2, Server, ShieldCheck } from 'lucide-react';
+import { CheckCircle2, AlertCircle, X, Info, ShieldAlert, Key } from 'lucide-react';
 import { isApiKeyMissing } from './services/geminiService';
 
 interface ToastProps {
@@ -118,81 +118,59 @@ function App() {
     const commonProps = { showNotification, onNavigate: setCurrentView };
     const keyIsMissing = isApiKeyMissing();
 
-    if (currentView !== AppView.LOGIN && keyIsMissing) {
-      return (
-        <div className="min-h-[85vh] flex items-center justify-center p-6 text-center bg-slate-950">
-            <div className="bg-slate-900 border border-slate-800 rounded-[3rem] p-10 md:p-14 max-w-3xl shadow-[0_0_50px_rgba(79,70,229,0.25)] animate-scale-in relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 via-indigo-600 to-red-600"></div>
-                <div className="w-24 h-24 bg-red-600/10 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner border border-red-500/20">
-                    <ShieldCheck size={44} className="text-red-400" />
-                </div>
-                <h2 className="text-4xl font-black text-white mb-4 tracking-tighter italic uppercase">RESET <span className="text-red-500">5.0.0</span></h2>
-                <p className="text-slate-400 mb-10 leading-relaxed text-lg max-w-lg mx-auto">
-                    <b>NUCLEAR DEPLOY:</b> O erro de compilação JSX e o conflito de React (Importmap) foram erradicados. O código agora é 100% compatível com a Vercel.
-                </p>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-                    <div className="bg-slate-800/40 p-6 rounded-3xl border border-slate-700/50 text-left">
-                        <p className="text-[11px] font-black text-red-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                           <Activity size={14}/> Diagnóstico v5.0.0
-                        </p>
-                        <div className="space-y-3 text-xs text-slate-400 font-medium">
-                           <div className="flex justify-between border-b border-slate-700/30 pb-2"><span>JSX Syntax</span> <span className="text-green-400 font-bold">CORRIGIDO</span></div>
-                           <div className="flex justify-between border-b border-slate-700/30 pb-2"><span>ImportMap</span> <span className="text-red-400 font-bold">DELETADO</span></div>
-                           <div className="flex justify-between border-b border-slate-700/30 pb-2"><span>Build</span> <span className="text-white">Clean Vite</span></div>
-                        </div>
-                    </div>
-                    <div className="bg-slate-800/40 p-6 rounded-3xl border border-slate-700/50 text-left">
-                         <p className="text-[11px] font-black text-indigo-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                           <Link2 size={14}/> Ativação Sniper
-                        </p>
-                        <p className="text-[11px] text-slate-300 leading-relaxed">
-                            Adicione <code className="text-white">API_KEY</code> nas variáveis de ambiente da Vercel para ligar os motores.
-                        </p>
-                    </div>
-                </div>
+    if (currentView === AppView.LOGIN) {
+      return <Login onLogin={() => setCurrentView(AppView.DASHBOARD)} />;
+    }
 
-                <div className="flex flex-col md:flex-row gap-4">
-                    <button 
-                        onClick={() => window.location.reload()}
-                        className="flex-[2] bg-indigo-600 text-white font-black py-5 rounded-2xl hover:bg-indigo-500 transition-all flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(79,70,229,0.3)] group text-sm uppercase tracking-widest"
-                    >
-                        <RefreshCw size={20} className="group-hover:rotate-180 transition-transform duration-700" /> Sincronizar Agora
-                    </button>
-                    <a 
-                        href="https://vercel.com/dashboard" 
-                        target="_blank"
-                        className="flex-1 bg-slate-800 text-slate-300 font-bold py-5 rounded-2xl hover:bg-slate-700 transition-all border border-slate-700 flex items-center justify-center gap-2 text-sm uppercase tracking-widest"
-                    >
-                        Vercel Panel
-                    </a>
-                </div>
+    const viewContent = (() => {
+      switch (currentView) {
+        case AppView.DASHBOARD: return <Dashboard campaigns={campaigns} wallets={wallets} onToggleStatus={handleToggleCampaignStatus} onTopUp={handleTopUp} {...commonProps} />;
+        case AppView.BRAIN_CENTER: return <BrainCenter {...commonProps} />;
+        case AppView.LAUNCH_CENTER: return <LaunchCenter {...commonProps} />;
+        case AppView.SALES_ACCELERATOR: return <SalesAccelerator {...commonProps} />;
+        case AppView.SALES_FLOW: return <SalesFlowManager {...commonProps} />;
+        case AppView.CREATE_CAMPAIGN: return <CreateCampaign campaignCount={campaigns.length} onAddCampaign={handleAddCampaign} onFinish={() => setCurrentView(AppView.DASHBOARD)} {...commonProps} />;
+        case AppView.INTEGRATIONS: return <Integrations {...commonProps} />;
+        case AppView.OPTIMIZATION: return <Optimization {...commonProps} />;
+        case AppView.SOCIAL_CONTENT: return <SocialContent {...commonProps} />;
+        case AppView.SETTINGS: return <Settings onLogout={() => setCurrentView(AppView.LOGIN)} {...commonProps} />;
+        case AppView.MARKET_INTELLIGENCE: return <MarketIntelligence {...commonProps} />;
+        case AppView.CRM: return <CrmAutomation {...commonProps} />;
+        case AppView.LANDING_PAGE: return <LandingPageBuilder {...commonProps} />;
+        case AppView.ACADEMY: return <Academy {...commonProps} />;
+        case AppView.BLOG: return <Blog {...commonProps} />;
+        case AppView.AFFILIATES: return <Affiliates {...commonProps} />;
+        case AppView.TERMS: return <TermsOfUse onBack={() => setCurrentView(AppView.SETTINGS)} />;
+        default: return <Dashboard campaigns={campaigns} wallets={wallets} />;
+      }
+    })();
+
+    return (
+      <div className="flex flex-col h-full w-full">
+        {keyIsMissing && (
+          <div className="sticky top-0 z-[100] bg-amber-600 text-white px-4 py-2 flex items-center justify-between shadow-xl animate-fade-in">
+            <div className="flex items-center gap-3">
+              <ShieldAlert size={18} />
+              <div className="flex flex-col">
+                <span className="text-[11px] font-black uppercase tracking-tighter">Modo Demonstração Ativo</span>
+                <span className="text-[10px] font-medium opacity-90">A API Key não foi detectada. Adicione "API_KEY" na Vercel para habilitar a IA.</span>
+              </div>
             </div>
+            <a 
+              href="https://vercel.com/dashboard" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="bg-white/20 hover:bg-white/30 px-3 py-1 rounded text-[10px] font-bold transition-colors flex items-center gap-1.5"
+            >
+              <Key size={12} /> Configurar
+            </a>
+          </div>
+        )}
+        <div className="flex-1">
+          {viewContent}
         </div>
-      );
-    }
-
-    switch (currentView) {
-      case AppView.LOGIN: return <Login onLogin={() => setCurrentView(AppView.DASHBOARD)} />;
-      case AppView.DASHBOARD: return <Dashboard campaigns={campaigns} wallets={wallets} onToggleStatus={handleToggleCampaignStatus} onTopUp={handleTopUp} {...commonProps} />;
-      case AppView.BRAIN_CENTER: return <BrainCenter {...commonProps} />;
-      case AppView.LAUNCH_CENTER: return <LaunchCenter {...commonProps} />;
-      case AppView.SALES_ACCELERATOR: return <SalesAccelerator {...commonProps} />;
-      case AppView.SALES_FLOW: return <SalesFlowManager {...commonProps} />;
-      case AppView.CREATE_CAMPAIGN: return <CreateCampaign campaignCount={campaigns.length} onAddCampaign={handleAddCampaign} onFinish={() => setCurrentView(AppView.DASHBOARD)} {...commonProps} />;
-      case AppView.INTEGRATIONS: return <Integrations {...commonProps} />;
-      case AppView.OPTIMIZATION: return <Optimization {...commonProps} />;
-      case AppView.SOCIAL_CONTENT: return <SocialContent {...commonProps} />;
-      case AppView.SETTINGS: return <Settings onLogout={() => setCurrentView(AppView.LOGIN)} {...commonProps} />;
-      case AppView.MARKET_INTELLIGENCE: return <MarketIntelligence {...commonProps} />;
-      case AppView.CRM: return <CrmAutomation {...commonProps} />;
-      case AppView.LANDING_PAGE: return <LandingPageBuilder {...commonProps} />;
-      case AppView.ACADEMY: return <Academy {...commonProps} />;
-      case AppView.BLOG: return <Blog {...commonProps} />;
-      case AppView.AFFILIATES: return <Affiliates {...commonProps} />;
-      case AppView.TERMS: return <TermsOfUse onBack={() => setCurrentView(AppView.SETTINGS)} />;
-      default: return <Dashboard campaigns={campaigns} wallets={wallets} />;
-    }
+      </div>
+    );
   };
 
   return (
