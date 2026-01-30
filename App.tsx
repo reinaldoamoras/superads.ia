@@ -72,12 +72,12 @@ function App() {
   const renderView = () => {
     const commonProps = { showNotification, onNavigate: setCurrentView };
     
-    // Proteção contra erro de renderização
+    // Verificação segura
     let keyMissing = false;
     try {
         keyMissing = isApiKeyMissing();
     } catch(e) {
-        console.error("App: Erro ao verificar API KEY", e);
+        keyMissing = true;
     }
 
     if (currentView === AppView.LOGIN) {
@@ -115,12 +115,9 @@ function App() {
               <ShieldAlert size={20} className="animate-pulse" />
               <div className="flex flex-col">
                 <span className="text-xs font-black uppercase">API_KEY Pendente</span>
-                <span className="text-[10px] opacity-90">Vá em Deployments na Vercel e faça um REDEPLOY para ativar a chave.</span>
+                <span className="text-[10px] opacity-90">Verifique sua chave Gemini nas configurações da Vercel.</span>
               </div>
             </div>
-            <a href="https://vercel.com" target="_blank" className="bg-white text-red-600 px-3 py-1.5 rounded-lg text-[10px] font-bold flex items-center gap-1">
-               <RefreshCcw size={12} /> Redeploy Agora
-            </a>
           </div>
         )}
         <div className="flex-1 relative overflow-y-auto">
@@ -133,7 +130,7 @@ function App() {
   return (
     <Layout currentView={currentView} setView={setCurrentView}>
       {notification && (
-        <div className={`fixed top-6 right-6 z-[200] flex items-center gap-3 px-4 py-3 rounded-xl shadow-2xl border animate-slide-in-right ${notification.type === 'success' ? 'bg-green-600' : 'bg-red-600'} text-white`}>
+        <div className={`fixed top-6 right-6 z-[200] flex items-center gap-3 px-4 py-3 rounded-xl shadow-2xl border animate-slide-in-right ${notification.type === 'success' ? 'bg-green-600 border-green-400' : 'bg-red-600 border-red-400'} text-white`}>
             {notification.type === 'success' ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
             <span className="text-sm font-medium">{notification.message}</span>
         </div>
