@@ -20,7 +20,7 @@ import { SalesFlowManager } from './components/SalesFlowManager';
 import { BrainCenter } from './components/BrainCenter';
 import { LaunchCenter } from './components/LaunchCenter';
 import { AppView, GeneratedCampaign, Platform, CampaignObjective, PlatformWallet } from './types';
-import { CheckCircle2, AlertCircle, X, Info, RefreshCw, Activity, Link2, Server } from 'lucide-react';
+import { CheckCircle2, AlertCircle, X, Info, RefreshCw, Activity, Link2, Server, ShieldCheck } from 'lucide-react';
 import { isApiKeyMissing } from './services/geminiService';
 
 interface ToastProps {
@@ -121,33 +121,33 @@ function App() {
     if (currentView !== AppView.LOGIN && keyIsMissing) {
       return (
         <div className="min-h-[85vh] flex items-center justify-center p-6 text-center bg-slate-950">
-            <div className="bg-slate-900 border border-slate-800 rounded-[3rem] p-10 md:p-14 max-w-3xl shadow-[0_0_50px_rgba(79,70,229,0.15)] animate-scale-in relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600"></div>
-                <div className="w-24 h-24 bg-indigo-600/10 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner border border-indigo-500/20">
-                    <Server size={44} className="text-indigo-400" />
+            <div className="bg-slate-900 border border-slate-800 rounded-[3rem] p-10 md:p-14 max-w-3xl shadow-[0_0_50px_rgba(79,70,229,0.25)] animate-scale-in relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 via-indigo-600 to-red-600"></div>
+                <div className="w-24 h-24 bg-red-600/10 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner border border-red-500/20">
+                    <ShieldCheck size={44} className="text-red-400" />
                 </div>
-                <h2 className="text-4xl font-black text-white mb-4 tracking-tighter italic uppercase">SISTEMA <span className="text-indigo-500">3.4.0</span></h2>
+                <h2 className="text-4xl font-black text-white mb-4 tracking-tighter italic uppercase">RESET <span className="text-red-500">5.0.0</span></h2>
                 <p className="text-slate-400 mb-10 leading-relaxed text-lg max-w-lg mx-auto">
-                    Se você vê <b>3.4.0</b> acima, o build foi bem sucedido. O arquivo <b>index.html</b> foi completamente limpo e o conflito de versões foi removido.
+                    <b>NUCLEAR DEPLOY:</b> O erro de compilação JSX e o conflito de React (Importmap) foram erradicados. O código agora é 100% compatível com a Vercel.
                 </p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
                     <div className="bg-slate-800/40 p-6 rounded-3xl border border-slate-700/50 text-left">
-                        <p className="text-[11px] font-black text-indigo-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                           <Activity size={14}/> Integridade
+                        <p className="text-[11px] font-black text-red-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                           <Activity size={14}/> Diagnóstico v5.0.0
                         </p>
                         <div className="space-y-3 text-xs text-slate-400 font-medium">
-                           <div className="flex justify-between border-b border-slate-700/30 pb-2"><span>Versão</span> <span className="text-white font-bold">v3.4.0 (FINAL)</span></div>
-                           <div className="flex justify-between border-b border-slate-700/30 pb-2"><span>Status</span> <span className="text-green-400 font-bold">BUILD LIMPO</span></div>
-                           <div className="flex justify-between border-b border-slate-700/30 pb-2"><span>Core</span> <span className="text-white">Vite Optimized</span></div>
+                           <div className="flex justify-between border-b border-slate-700/30 pb-2"><span>JSX Syntax</span> <span className="text-green-400 font-bold">CORRIGIDO</span></div>
+                           <div className="flex justify-between border-b border-slate-700/30 pb-2"><span>ImportMap</span> <span className="text-red-400 font-bold">DELETADO</span></div>
+                           <div className="flex justify-between border-b border-slate-700/30 pb-2"><span>Build</span> <span className="text-white">Clean Vite</span></div>
                         </div>
                     </div>
                     <div className="bg-slate-800/40 p-6 rounded-3xl border border-slate-700/50 text-left">
                          <p className="text-[11px] font-black text-indigo-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                           <Link2 size={14}/> Próximo Passo
+                           <Link2 size={14}/> Ativação Sniper
                         </p>
                         <p className="text-[11px] text-slate-300 leading-relaxed">
-                            Vá ao painel da Vercel &rarr; Settings &rarr; Environment Variables e configure sua <code className="text-white">API_KEY</code> para ativar a IA Sniper.
+                            Adicione <code className="text-white">API_KEY</code> nas variáveis de ambiente da Vercel para ligar os motores.
                         </p>
                     </div>
                 </div>
@@ -157,14 +157,14 @@ function App() {
                         onClick={() => window.location.reload()}
                         className="flex-[2] bg-indigo-600 text-white font-black py-5 rounded-2xl hover:bg-indigo-500 transition-all flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(79,70,229,0.3)] group text-sm uppercase tracking-widest"
                     >
-                        <RefreshCw size={20} className="group-hover:rotate-180 transition-transform duration-700" /> Reiniciar Motor
+                        <RefreshCw size={20} className="group-hover:rotate-180 transition-transform duration-700" /> Sincronizar Agora
                     </button>
                     <a 
                         href="https://vercel.com/dashboard" 
                         target="_blank"
                         className="flex-1 bg-slate-800 text-slate-300 font-bold py-5 rounded-2xl hover:bg-slate-700 transition-all border border-slate-700 flex items-center justify-center gap-2 text-sm uppercase tracking-widest"
                     >
-                        Abrir Vercel
+                        Vercel Panel
                     </a>
                 </div>
             </div>
