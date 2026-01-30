@@ -20,43 +20,8 @@ import { SalesFlowManager } from './components/SalesFlowManager';
 import { BrainCenter } from './components/BrainCenter';
 import { LaunchCenter } from './components/LaunchCenter';
 import { AppView, GeneratedCampaign, Platform, CampaignObjective, PlatformWallet } from './types';
-import { CheckCircle2, AlertCircle, X, Info, ShieldAlert, Key, RefreshCcw } from 'lucide-react';
+import { CheckCircle2, AlertCircle, X, Info, ShieldAlert, RefreshCcw } from 'lucide-react';
 import { isApiKeyMissing } from './services/geminiService';
-
-interface ToastProps {
-  message: string;
-  type: 'success' | 'error' | 'info';
-  onClose: () => void;
-}
-
-const Toast: React.FC<ToastProps> = ({ message, type, onClose }) => {
-  useEffect(() => {
-    const timer = setTimeout(onClose, 3000);
-    return () => clearTimeout(timer);
-  }, [onClose]);
-
-  const styles = {
-    success: 'bg-green-600 text-white border-green-500',
-    error: 'bg-red-600 text-white border-red-500',
-    info: 'bg-indigo-600 text-white border-indigo-500',
-  };
-
-  const icons = {
-    success: <CheckCircle2 size={18} />,
-    error: <AlertCircle size={18} />,
-    info: <Info size={18} />,
-  };
-
-  return (
-    <div className={`fixed top-6 right-6 z-[100] flex items-center gap-3 px-4 py-3 rounded-xl shadow-2xl border animate-slide-in-right ${styles[type]}`}>
-      {icons[type]}
-      <span className="text-sm font-medium">{message}</span>
-      <button onClick={onClose} className="opacity-70 hover:opacity-100 ml-2">
-        <X size={14} />
-      </button>
-    </div>
-  );
-};
 
 const INITIAL_CAMPAIGNS: GeneratedCampaign[] = [
   {
@@ -87,36 +52,33 @@ function App() {
   const [currentView, setCurrentView] = useState<AppView>(AppView.LOGIN);
   const [campaigns, setCampaigns] = useState<GeneratedCampaign[]>(INITIAL_CAMPAIGNS);
   const [wallets, setWallets] = useState<PlatformWallet[]>(INITIAL_WALLETS);
-  const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
+  const [notification, setNotification] = useState(null);
 
-  const showNotification = (message: string, type: 'success' | 'error' | 'info' = 'success') => {
+  const showNotification = (message, type = 'success') => {
     setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
   };
 
-  const handleAddCampaign = (campaign: GeneratedCampaign) => {
+  const handleAddCampaign = (campaign) => {
     setCampaigns(prev => [campaign, ...prev]);
     showNotification('Campanha criada!', 'success');
   };
 
-  const handleTopUp = (platform: Platform, amount: number) => {
-    setWallets(prev => prev.map(wallet => wallet.platform === platform ? { ...wallet, balance: wallet.balance + amount } : wallet));
+  const handleTopUp = (platform, amount) => {
+    setWallets(prev => prev.map(w => w.platform === platform ? { ...w, balance: w.balance + amount } : w));
     showNotification(`Recarga de R$ ${amount} concluída!`, 'success');
-  };
-
-  const handleToggleCampaignStatus = (id: string) => {
-    setCampaigns(prev => prev.map(c => {
-      if (c.id === id) {
-        const newStatus = c.status === 'ACTIVE' ? 'PAUSED' : 'ACTIVE';
-        showNotification(`Campanha ${newStatus === 'ACTIVE' ? 'ativada' : 'pausada'}.`, 'info');
-        return { ...c, status: newStatus };
-      }
-      return c;
-    }));
   };
 
   const renderView = () => {
     const commonProps = { showNotification, onNavigate: setCurrentView };
-    const keyIsMissing = isApiKeyMissing();
+    
+    // Proteção contra erro de renderização
+    let keyMissing = false;
+    try {
+        keyMissing = isApiKeyMissing();
+    } catch(e) {
+        console.error("App: Erro ao verificar API KEY", e);
+    }
 
     if (currentView === AppView.LOGIN) {
       return <Login onLogin={() => setCurrentView(AppView.DASHBOARD)} />;
@@ -124,11 +86,7 @@ function App() {
 
     const viewContent = (() => {
       switch (currentView) {
-        case AppView.DASHBOARD: return <Dashboard campaigns={campaigns} wallets={wallets} onToggleStatus={handleToggleCampaignStatus} onTopUp={handleTopUp} {...commonProps} />;
-        case AppView.BRAIN_CENTER: return <BrainCenter {...commonProps} />;
-        case AppView.LAUNCH_CENTER: return <LaunchCenter {...commonProps} />;
-        case AppView.SALES_ACCELERATOR: return <SalesAccelerator {...commonProps} />;
-        case AppView.SALES_FLOW: return <SalesFlowManager {...commonProps} />;
+        case AppView.DASHBOARD: return <Dashboard campaigns={campaigns} wallets={wallets} onTopUp={handleTopUp} {...commonProps} />;
         case AppView.CREATE_CAMPAIGN: return <CreateCampaign campaignCount={campaigns.length} onAddCampaign={handleAddCampaign} onFinish={() => setCurrentView(AppView.DASHBOARD)} {...commonProps} />;
         case AppView.INTEGRATIONS: return <Integrations {...commonProps} />;
         case AppView.OPTIMIZATION: return <Optimization {...commonProps} />;
@@ -140,35 +98,32 @@ function App() {
         case AppView.ACADEMY: return <Academy {...commonProps} />;
         case AppView.BLOG: return <Blog {...commonProps} />;
         case AppView.AFFILIATES: return <Affiliates {...commonProps} />;
+        case AppView.SALES_ACCELERATOR: return <SalesAccelerator {...commonProps} />;
+        case AppView.SALES_FLOW: return <SalesFlowManager {...commonProps} />;
+        case AppView.BRAIN_CENTER: return <BrainCenter {...commonProps} />;
+        case AppView.LAUNCH_CENTER: return <LaunchCenter {...commonProps} />;
         case AppView.TERMS: return <TermsOfUse onBack={() => setCurrentView(AppView.SETTINGS)} />;
-        default: return <Dashboard campaigns={campaigns} wallets={wallets} />;
+        default: return <Dashboard campaigns={campaigns} wallets={wallets} {...commonProps} />;
       }
     })();
 
     return (
-      <div className="flex flex-col h-full w-full">
-        {keyIsMissing && (
-          <div className="sticky top-0 z-[100] bg-red-600 text-white px-4 py-3 flex items-center justify-between shadow-2xl border-b border-red-500 animate-fade-in">
-            <div className="flex items-center gap-4">
-              <ShieldAlert size={24} className="animate-pulse" />
+      <div className="flex flex-col h-full w-full overflow-hidden">
+        {keyMissing && (
+          <div className="bg-red-600 text-white px-4 py-3 flex items-center justify-between shadow-2xl z-[100]">
+            <div className="flex items-center gap-3">
+              <ShieldAlert size={20} className="animate-pulse" />
               <div className="flex flex-col">
-                <span className="text-sm font-black uppercase tracking-tighter">API KEY NÃO DETECTADA NO BUILD</span>
-                <span className="text-xs font-medium opacity-90">Você adicionou na Vercel? Se sim, clique em <b>Redeploy</b> para injetar a chave no código.</span>
+                <span className="text-xs font-black uppercase">API_KEY Pendente</span>
+                <span className="text-[10px] opacity-90">Vá em Deployments na Vercel e faça um REDEPLOY para ativar a chave.</span>
               </div>
             </div>
-            <div className="flex gap-2">
-              <a 
-                href="https://vercel.com/dashboard" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="bg-white text-red-600 px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 shadow-md hover:bg-slate-100"
-              >
-                <RefreshCcw size={14} /> Fazer Redeploy na Vercel
-              </a>
-            </div>
+            <a href="https://vercel.com" target="_blank" className="bg-white text-red-600 px-3 py-1.5 rounded-lg text-[10px] font-bold flex items-center gap-1">
+               <RefreshCcw size={12} /> Redeploy Agora
+            </a>
           </div>
         )}
-        <div className="flex-1">
+        <div className="flex-1 relative overflow-y-auto">
           {viewContent}
         </div>
       </div>
@@ -177,7 +132,12 @@ function App() {
 
   return (
     <Layout currentView={currentView} setView={setCurrentView}>
-      {notification && <Toast message={notification.message} type={notification.type} onClose={() => setNotification(null)} />}
+      {notification && (
+        <div className={`fixed top-6 right-6 z-[200] flex items-center gap-3 px-4 py-3 rounded-xl shadow-2xl border animate-slide-in-right ${notification.type === 'success' ? 'bg-green-600' : 'bg-red-600'} text-white`}>
+            {notification.type === 'success' ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
+            <span className="text-sm font-medium">{notification.message}</span>
+        </div>
+      )}
       {renderView()}
     </Layout>
   );
