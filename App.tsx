@@ -23,7 +23,7 @@ import { AppView, GeneratedCampaign, Platform, CampaignObjective, PlatformWallet
 import { CheckCircle2, AlertCircle, X, Info, ShieldAlert, RefreshCcw } from 'lucide-react';
 import { isApiKeyMissing } from './services/geminiService';
 
-const APP_VERSION = "18.5.2-Stable";
+const APP_VERSION = "v18.5.5-Enterprise-Hotfix";
 
 const INITIAL_CAMPAIGNS: GeneratedCampaign[] = [
   {
@@ -52,17 +52,17 @@ const INITIAL_WALLETS: PlatformWallet[] = [
 
 function App() {
   const [currentView, setCurrentView] = useState<AppView>(AppView.LOGIN);
-  const [campaigns, setCampaigns] = useState<GeneratedCampaign[]>(INITIAL_CAMPAIGNS);
-  const [wallets, setWallets] = useState<PlatformWallet[]>(INITIAL_WALLETS);
+  const [campaigns, setCampaigns] = useState(INITIAL_CAMPAIGNS);
+  const [wallets, setWallets] = useState(INITIAL_WALLETS);
   const [notification, setNotification] = useState(null);
 
   useEffect(() => {
-    console.log(`[SuperAds IA] Sistema Iniciado - Versão: ${APP_VERSION}`);
+    console.log(`%c SUPERADS IA %c ${APP_VERSION} `, 'background: #4f46e5; color: white; font-weight: bold; padding: 4px; border-radius: 4px 0 0 4px;', 'background: #1e293b; color: #818cf8; padding: 4px; border-radius: 0 4px 4px 0;');
   }, []);
 
   const showNotification = (message, type = 'success') => {
     setNotification({ message, type });
-    setTimeout(() => setNotification(null), 3000);
+    setTimeout(() => setNotification(null), 4000);
   };
 
   const handleAddCampaign = (campaign) => {
@@ -125,7 +125,7 @@ function App() {
             </div>
           </div>
         )}
-        <div className="flex-1 relative overflow-y-auto">
+        <div className="flex-1 relative overflow-y-auto custom-scrollbar">
           {viewContent}
         </div>
       </div>
@@ -135,9 +135,10 @@ function App() {
   return (
     <Layout currentView={currentView} setView={setCurrentView}>
       {notification && (
-        <div className={`fixed top-6 right-6 z-[200] flex items-center gap-3 px-4 py-3 rounded-xl shadow-2xl border animate-slide-in-right ${notification.type === 'success' ? 'bg-green-600 border-green-400' : 'bg-red-600 border-red-400'} text-white`}>
-            {notification.type === 'success' ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
-            <span className="text-sm font-medium">{notification.message}</span>
+        <div className={`fixed top-8 right-8 z-[200] flex items-center gap-4 px-6 py-4 rounded-2xl shadow-2xl border-2 animate-slide-in-right ${notification.type === 'success' ? 'bg-green-600 border-green-400' : 'bg-red-600 border-red-400'} text-white`}>
+            {notification.type === 'success' ? <CheckCircle2 size={24} /> : <AlertCircle size={24} />}
+            <span className="text-base font-bold tracking-tight">{notification.message}</span>
+            <button onClick={() => setNotification(null)} className="ml-2 opacity-50 hover:opacity-100"><X size={16}/></button>
         </div>
       )}
       {renderView()}
