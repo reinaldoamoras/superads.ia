@@ -23,6 +23,8 @@ import { AppView, GeneratedCampaign, Platform, CampaignObjective, PlatformWallet
 import { CheckCircle2, AlertCircle, X, Info, ShieldAlert, RefreshCcw } from 'lucide-react';
 import { isApiKeyMissing } from './services/geminiService';
 
+const APP_VERSION = "18.5.2-Stable";
+
 const INITIAL_CAMPAIGNS: GeneratedCampaign[] = [
   {
     id: 'cmp_123',
@@ -54,6 +56,10 @@ function App() {
   const [wallets, setWallets] = useState<PlatformWallet[]>(INITIAL_WALLETS);
   const [notification, setNotification] = useState(null);
 
+  useEffect(() => {
+    console.log(`[SuperAds IA] Sistema Iniciado - Versão: ${APP_VERSION}`);
+  }, []);
+
   const showNotification = (message, type = 'success') => {
     setNotification({ message, type });
     setTimeout(() => setNotification(null), 3000);
@@ -72,7 +78,6 @@ function App() {
   const renderView = () => {
     const commonProps = { showNotification, onNavigate: setCurrentView };
     
-    // Verificação segura
     let keyMissing = false;
     try {
         keyMissing = isApiKeyMissing();
@@ -115,7 +120,7 @@ function App() {
               <ShieldAlert size={20} className="animate-pulse" />
               <div className="flex flex-col">
                 <span className="text-xs font-black uppercase">API_KEY Pendente</span>
-                <span className="text-[10px] opacity-90">Verifique sua chave Gemini nas configurações da Vercel.</span>
+                <span className="text-[10px] opacity-90">Verifique sua chave Gemini nas configurações.</span>
               </div>
             </div>
           </div>
