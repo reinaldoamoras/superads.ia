@@ -1,0 +1,7 @@
+{
+  "name": "SuperAds IA",
+  "description": "A Máquina de Vendas Inteligente. De MEIs a Grandes Corporações: crie campanhas de alta performance em Meta, Google e TikTok com escala ilimitada.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
