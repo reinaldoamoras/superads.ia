@@ -2,7 +2,7 @@
 {
   "name": "superads-ia",
   "private": true,
-  "version": "22.0.0",
+  "version": "23.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
